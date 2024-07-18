@@ -1,6 +1,6 @@
 imports:
-    - vendor/sylius/sylius/src/Sylius/Behat/Resources/config/suites.yml
     - tests/Behat/Resources/config/suites.yml
+    - vendor/sylius/sylius/src/Sylius/Behat/Resources/config/suites.yml
 
 default:
     extensions:
@@ -38,6 +38,8 @@ default:
                                     - "no-sandbox"
                             extra_capabilities:
                                 unexpectedAlertBehaviour: accept
+                                goog:chromeOptions:
+                                    w3c: false
                 firefox:
                     selenium2:
                         browser: firefox
@@ -46,7 +48,10 @@ default:
         FriendsOfBehat\SymfonyExtension:
             bootstrap: tests/Application/config/bootstrap.php
             kernel:
-                class: Tests\BitBag\SyliusPocztaPolskaShippingExportPlugin\Application\Kernel
+                debug: true
+                class: Tests\BitBag\SyliusInPostPlugin\Application\Kernel
+                path: tests/Application/Kernel.php
+                environment: test
 
         FriendsOfBehat\VariadicExtension: ~
 
