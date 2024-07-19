@@ -75,12 +75,16 @@ final class ShippingGatewayContext implements Context
      */
     public function setProductWeightTo($weight)
     {
+        if (!is_numeric($weight)) {
+            throw new \InvalidArgumentException('Weight must be a numeric value.');
+        }
+        $weight = (float) $weight;
+
         /** @var ProductInterface $product */
         $product = $this->sharedStorage->get('product');
 
         /** @var ProductVariantInterface $productVariant */
         $productVariant = $this->defaultVariantResolver->getVariant($product);
-
         $productVariant->setWeight($weight);
 
         $this->entityManager->flush();
