@@ -83,7 +83,7 @@ final class ShippingExportEventListener
 
             $this->saveShippingLabel($shippingExport, $labelContent, 'pdf');
         } catch (SoapFault $exception) {
-            $this->requestStack->getSession()->getFlashBag()->add(
+            $this->requestStack->getSession()->getBag('flashes')->add(
                 'error',
                 sprintf(
                     'Poczta Polska Web Service for #%s order: %s',
@@ -95,7 +95,7 @@ final class ShippingExportEventListener
             return;
         }
 
-        $this->requestStack->getSession()->getFlashBag()->add('success', 'bitbag.ui.shipment_data_has_been_exported');
+        $this->requestStack->getSession()->getBag('flashes')->add('success', 'bitbag.ui.shipment_data_has_been_exported');
         $this->markShipmentAsExported($shippingExport);
     }
 
