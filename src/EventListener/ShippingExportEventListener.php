@@ -19,7 +19,7 @@ use DateTime;
 use SoapFault;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Webmozart\Assert\Assert;
 
 final class ShippingExportEventListener
@@ -34,7 +34,7 @@ final class ShippingExportEventListener
 
     private WebClientInterface $webClient;
 
-    private FlashBagInterface $flashBag;
+    private RequestStack $requestStack;
 
     private FileNameGeneratorInterface $fileNameGenerator;
 
@@ -43,14 +43,14 @@ final class ShippingExportEventListener
         ShippingExportRepository $shippingExportRepository,
         string $shippingLabelsPath,
         WebClientInterface $webClient,
-        FlashBagInterface $flashBag,
+        RequestStack $requestStack,
         fileNameGeneratorInterface $fileNameGenerator
     ) {
         $this->filesystem = $filesystem;
         $this->shippingExportRepository = $shippingExportRepository;
         $this->shippingLabelsPath = $shippingLabelsPath;
         $this->webClient = $webClient;
-        $this->flashBag = $flashBag;
+        $this->requestStack = $requestStack;
         $this->fileNameGenerator = $fileNameGenerator;
     }
 
@@ -82,7 +82,7 @@ final class ShippingExportEventListener
 
             $this->saveShippingLabel($shippingExport, $labelContent, 'pdf');
         } catch (SoapFault $exception) {
-            $this->flashBag->add(
+            $this->requestStack->getSession()->getFlashBag()->add(
                 'error',
                 sprintf(
                     'Poczta Polska Web Service for #%s order: %s',
@@ -94,7 +94,7 @@ final class ShippingExportEventListener
             return;
         }
 
-        $this->flashBag->add('success', 'bitbag.ui.shipment_data_has_been_exported');
+        $this->requestStack->getSession()->getFlashBag()->add('success', 'bitbag.ui.shipment_data_has_been_exported');
         $this->markShipmentAsExported($shippingExport);
     }
 
