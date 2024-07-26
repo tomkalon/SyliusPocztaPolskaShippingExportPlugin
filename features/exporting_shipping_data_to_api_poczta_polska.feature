@@ -41,7 +41,7 @@ Feature: Managing shipping gateway
         And set product weight to "10"
         And set units to the shipment
 
-    @ui @test
+    @ui
     Scenario: Seeing shipments to export
         When I go to the shipping export page
         Then I should see 5 shipments with "New" state
