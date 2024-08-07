@@ -93,6 +93,7 @@ final class ShippingExportEventListener
                     $exception->getMessage(),
                 ),
             );
+
             return;
         }
         $flashBag->add('success', 'bitbag.ui.shipment_data_has_been_exported');
